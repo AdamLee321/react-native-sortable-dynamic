@@ -26,6 +26,7 @@ import { useSortableConfig } from './Config';
  * @param {object} scrollContentContainerStyle - Custom style to apply to the scroll content container.
  * @param {object} itemStyle - Custom style to apply to each SortableItem.
  * @param {...object} itemProps - Additional props to be passed to each SortableItem.
+ * @param {object} scrollViewProps - Additional props to be passed to the ScrollView component.
  *
  * Usage:
  * <SortableContainer
@@ -48,6 +49,7 @@ const SortableContainer = ({
   scrollContainerStyle,
   scrollContentContainerStyle,
   itemStyle,
+  scrollViewProps,
   ...itemProps
 }) => {
   // Get the configuration for columns and size from context
@@ -82,6 +84,7 @@ const SortableContainer = ({
       bounces={false}
       scrollEventThrottle={16}
       style={scrollContainerStyle}
+      {...scrollViewProps}
     >
       {/* Render each item using the SortableItemWrapper and SortableItem components */}
       {data.map((item, index) => (

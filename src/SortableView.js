@@ -47,6 +47,7 @@ const SortableView = ({
   scrollContentContainerStyle,
   itemStyle,
   itemProps,
+  scrollViewProps = {},
 }) => {
   return (
     <SortableListProvider config={config}>
@@ -63,6 +64,7 @@ const SortableView = ({
         scrollContentContainerStyle={scrollContentContainerStyle}
         style={itemStyle}
         {...itemProps}
+        scrollViewProps={scrollViewProps}
       />
     </SortableListProvider>
   );
