@@ -12617,7 +12617,7 @@ __metadata:
     react: "*"
     react-native: "*"
     react-native-gesture-handler: "*"
-    react-native-reanimated: ^2.0.0
+    react-native-reanimated: "*"
   languageName: unknown
   linkType: soft
 
