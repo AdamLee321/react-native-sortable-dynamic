@@ -21,6 +21,7 @@ import SortableContainer from './SortableContainer';
  * @param {object} scrollContentContainerStyle - Custom style to apply to the scroll content container.
  * @param {object} itemStyle - Custom style to apply to each SortableItem.
  * @param {object} itemProps - Additional props to be passed to each SortableItem.
+ * @param {object} scrollViewProps - Additional props to be passed to the ScrollView component.
  *
  * Usage:
  * <SortableView
@@ -47,6 +48,7 @@ const SortableView = ({
   scrollContentContainerStyle,
   itemStyle,
   itemProps,
+  scrollViewProps = {},
 }) => {
   return (
     <SortableListProvider config={config}>
@@ -63,6 +65,7 @@ const SortableView = ({
         scrollContentContainerStyle={scrollContentContainerStyle}
         style={itemStyle}
         {...itemProps}
+        scrollViewProps={scrollViewProps}
       />
     </SortableListProvider>
   );
