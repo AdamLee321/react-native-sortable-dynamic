@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 import Animated, {
   useAnimatedGestureHandler,
   useAnimatedStyle,
@@ -60,8 +60,8 @@ const SortableItemWrapper = ({
 }) => {
   // Get safe area insets for accurate height calculation
   const inset = useSafeAreaInsets();
-  const containerHeight =
-    Dimensions.get('window').height - inset.top - inset.bottom;
+  const { height } = useWindowDimensions();
+  const containerHeight = height - inset.top - inset.bottom;
 
   // Get the configuration for columns and size
   const { COL, SIZE, MARGIN } = useSortableConfig();
