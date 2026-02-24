@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 import Animated, {
-  useAnimatedGestureHandler,
   useAnimatedStyle,
   useAnimatedReaction,
   withSpring,
@@ -10,7 +9,7 @@ import Animated, {
   useSharedValue,
   runOnJS,
 } from 'react-native-reanimated';
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { animationConfig, getOrder, getPosition } from './Config';
 import { useSortableConfig } from './Config';
@@ -75,6 +74,9 @@ const SortableItemWrapper = ({
   const translateX = useSharedValue(position.x);
   const translateY = useSharedValue(position.y);
 
+  const startX = useSharedValue(0);
+  const startY = useSharedValue(0);
+
   // Effect to reset isGestureActive when not in editing mode
   useEffect(() => {
     if (!editing) {
@@ -94,21 +96,20 @@ const SortableItemWrapper = ({
     }
   );
 
-  // Gesture handler for dragging
-  const onGestureEvent = useAnimatedGestureHandler({
-    onStart: (_, ctx) => {
+  const pan = Gesture.Pan()
+    .onStart(() => {
       if (editing && draggable) {
         // Store the starting position
-        ctx.x = translateX.value;
-        ctx.y = translateY.value;
+        startX.value = translateX.value;
+        startY.value = translateY.value;
         isGestureActive.value = false;
       }
-    },
-    onActive: ({ translationX, translationY }, ctx) => {
+    })
+    .onUpdate((e) => {
       if (editing && draggable) {
         // Calculate new position
-        translateX.value = ctx.x + translationX;
-        translateY.value = ctx.y + translationY;
+        translateX.value = startX.value + e.translationX;
+        translateY.value = startY.value + e.translationY;
 
         // Calculate new order based on position
         const newOrder = getOrder(
@@ -147,8 +148,8 @@ const SortableItemWrapper = ({
           const diff = Math.min(lowerBound - translateY.value, lowerBound);
           scrollY.value -= diff;
           scrollTo(scrollView, 0, scrollY.value, false);
-          ctx.y -= diff;
-          translateY.value = ctx.y + translationY;
+          startY.value -= diff;
+          translateY.value = startY.value + e.translationY;
         }
         // Scroll down
         if (translateY.value > upperBound) {
@@ -158,12 +159,12 @@ const SortableItemWrapper = ({
           );
           scrollY.value += diff;
           scrollTo(scrollView, 0, scrollY.value, false);
-          ctx.y += diff;
-          translateY.value = ctx.y + translationY;
+          startY.value += diff;
+          translateY.value = startY.value + e.translationY;
         }
       }
-    },
-    onEnd: () => {
+    })
+    .onEnd(() => {
       if (draggable) {
         // Snap the item back into its place when the drag ends
         const newPosition = getPosition(positions.value[id], COL, SIZE);
@@ -173,8 +174,7 @@ const SortableItemWrapper = ({
         });
         translateY.value = withTiming(newPosition.y, animationConfig);
       }
-    },
-  });
+    });
 
   // Animated style for the item
   const style = useAnimatedStyle(() => {
@@ -199,11 +199,11 @@ const SortableItemWrapper = ({
 
   return (
     <Animated.View style={style}>
-      <PanGestureHandler enabled={editing} onGestureEvent={onGestureEvent}>
+      <GestureDetector gesture={pan}>
         <Animated.View style={StyleSheet.absoluteFill}>
           {children}
         </Animated.View>
-      </PanGestureHandler>
+      </GestureDetector>
     </Animated.View>
   );
 };

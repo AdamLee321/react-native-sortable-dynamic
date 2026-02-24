@@ -1,6 +1,6 @@
 {
   "name": "react-native-sortable-dynamic",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "This package provides a highly customizable, animated, and performant sortable grid list component for React Native. It allows users to easily reorder grid items through drag-and-drop gestures, with smooth animations powered by react-native-reanimated and gesture handling by react-native-gesture-handler.",
   "source": "./src/index.js",
   "main": "./lib/commonjs/index.js",
