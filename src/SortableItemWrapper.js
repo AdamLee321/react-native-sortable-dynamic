@@ -97,6 +97,7 @@ const SortableItemWrapper = ({
   );
 
   const pan = Gesture.Pan()
+    .enabled(editing && draggable)
     .onStart(() => {
       if (editing && draggable) {
         // Store the starting position
